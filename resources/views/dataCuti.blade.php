@@ -300,7 +300,7 @@
             var url_sk = url.replace(':file', sk_id);
             var url_suratpermohonan = url.replace(':file', suratpermohonan_id);
             var url_suratpengantar = url.replace(':file', suratpengantar_id);
-            console.log(blanko_id);
+            // console.log(blanko_id);
 
             $('#blanko').attr('href', url_blanko)
             $('#sk').attr('href', url_sk)

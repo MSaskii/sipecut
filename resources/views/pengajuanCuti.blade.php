@@ -160,7 +160,7 @@
                             <label class="col-form-label">Jenis Kelamin</label>
                         </div>
                         <div class="col-lg-10 col-9">
-                            <select class="form-control" name="jk">
+                            <select class="form-control" name="jenis_kelamin">
                                 <option value="" selected disabled>Pilih Jenis Kelamin</option>
                                 <option value="laki-laki">Laki-laki</option>
                                 <option value="perempuan">Perempuan</option>
