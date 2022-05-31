@@ -339,7 +339,7 @@
     </script>
     <script>
         $("#status_pengajuan").on('change', function() {
-            if ($(this).val() == "Disetujui") {
+            if ($(this).val() == "disetujui") {
                 $("#div_unggah").show();
                 $("#surat_cuti").prop('required', true);
             } else {
