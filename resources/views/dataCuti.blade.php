@@ -265,11 +265,11 @@
                                 <input type="file" name="surat_cuti" id="surat_cuti" class="form-control" accept="application/pdf"
                                     required>
                             </div>
-                            <div class="col-lg-10 col-9">
+                            {{-- <div class="col-lg-10 col-9">
                                 <button type="submit" class="btn btn-success ml-1">
                                     <i class="bx bx-check d-block d-sm-none"></i>
                                     <span class="d-none d-sm-block">Unggah</span>
-                            </div>
+                            </div> --}}
                         </div>
                     @endif
                     <button type="submit" class="btn btn-success ml-1">
