@@ -290,7 +290,7 @@
             $('#field_blanko').val(data.blanko)
             $('#field_sk').val(data.sk)
             $('#field_surat_permohonan').val(data.s_permohonan)
-            $('#field_surat_pengantar').val(data.s_penganta r)
+            $('#field_surat_pengantar').val(data.s_pengantar)
             var blanko_id = $("#field_blanko").val();
             var sk_id = $("#field_sk").val();
             var suratpermohonan_id = $("#field_surat_permohonan").val();
