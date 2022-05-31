@@ -243,11 +243,39 @@
 
                     <br>
                     @if (\Illuminate\Support\Facades\Session::get('pengguna')->peran == 'pegawaiumum')
-                        <button type="submit" class="btn btn-success ml-1">
-                            <i class="bx bx-check d-block d-sm-none"></i>
-                            <span class="d-none d-sm-block">Terima</span>
-                        </button>
+                        <div class="form-group">
+                            <label for="status_pengajuan">Status Pengajuan</label>
+                            <select class="form-control" name="status_pengajuan" required id="status_pengajuan">
+                                <option value="">== Pilih Status ==</option>
+                                <option value="disetujui">Disetujui</option>
+                                <option value="ditangguhkan">Ditangguhkan</option>
+                                <option value="ditolak">Ditolak</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="keterangan">Keterangan / Alasan</label>
+                            <textarea class="form-control" name="keterangan" id="keterangan" required rows="3"></textarea>
+                        </div>
+
+                        <div class="form-group row align-items-center" id="div_unggah" style="display:none;">
+                            <div class="col-lg-2 col-3">
+                                <label class="col-form-label">Unggah</label>
+                            </div>
+                            <div class="col-lg-10 col-9">
+                                <input type="file" name="surat_cuti" id="surat_cuti" class="form-control" accept="application/pdf"
+                                    required>
+                            </div>
+                            <div class="col-lg-10 col-9">
+                                <button type="submit" class="btn btn-success ml-1">
+                                    <i class="bx bx-check d-block d-sm-none"></i>
+                                    <span class="d-none d-sm-block">Unggah</span>
+                            </div>
+                        </div>
                     @endif
+                    <button type="submit" class="btn btn-success ml-1">
+                        <i class="bx bx-check d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">Terima</span>
+                    </button>
                     <button type="button" class="btn btn-warning" data-bs-dismiss="modal">
                         <i class="bx bx-x d-block d-sm-none"></i>
                         <span class="d-none d-sm-block">Batal</span>
@@ -271,7 +299,7 @@
         let dataTable = new simpleDatatables.DataTable(table1);
 
         function tambah(data) {
-          
+
             $('#id_pengajuan').val('PC-' + data.id)
             $('#idnya').val(data.id)
             $('#nama_pegawai').val(data.nama_pegawai)
@@ -308,5 +336,16 @@
             $('#surat_pengantar').attr('href', url_suratpengantar)
             $('#modaltambah').modal('show')
         }
+    </script>
+    <script>
+        $("#status_pengajuan").on('change', function() {
+            if ($(this).val() == "Disetujui") {
+                $("#div_unggah").show();
+                $("#surat_cuti").prop('required', true);
+            } else {
+                $("#div_unggah").hide();
+                $("#surat_cuti").prop('required', false);
+            }
+        })
     </script>
 @endpush

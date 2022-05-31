@@ -17,7 +17,7 @@ class KelolaCutiController extends Controller
             $data = AjukanCuti::all();
         }
 
-        return view('kelolacuti',['data' => $data]);
+        return view('kelolaCuti',['data' => $data]);
     }
 
     public function simpan(Request $request){
