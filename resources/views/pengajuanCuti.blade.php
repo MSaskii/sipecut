@@ -18,9 +18,9 @@
         <h4 style="color: rgb(204, 204, 204)">SISTEM INFORMASI PENGAJUAN CUTI DINAS PENDIDIKAN PROVINSI RIAU</h4>
         <a href="/login" class="btn btn-dark" style="position: absolute;top: 40px;right: 30px;">LOGIN</a>
     </div>
-<div style="height: 80vh" class="d-flex justify-content-center align-items-center">
+<div class="d-flex justify-content-center align-items-center">
 
-    <div class="card" style="width: 55%">
+    <div class="card">
         <div class="card-body">
             <div class="row">
                 @if(session()->has('sukses'))
