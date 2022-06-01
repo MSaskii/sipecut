@@ -14,7 +14,7 @@
                         </div>
                         <div class="card-content">
                             <div class="card-body">
-                                <table class="table table-striped" id="table1">
+                                <table class="table table-striped table-responsive" id="table1">
                                     <thead>
                                         <tr>
                                             <th>No</th>
@@ -26,6 +26,7 @@
                                             <th>Unit Kerja</th>
                                             <th>Jenis Cuti</th>
                                             <th>Status</th>
+                                            <th>Keterangan</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -43,6 +44,7 @@
                                                 <td>
                                                     {{ ucfirst($x->status) }}
                                                 </td>
+                                                <td>{{ $x->keterangan }}</td>
                                                 <td>
                                                     <input type="hidden" id="val_blanko" name="blanko"
                                                         value="{{ $x->blanko }}">
@@ -51,8 +53,19 @@
                                                         value="{{ $x->s_permohonan }}">
                                                     <input type="hidden" id="val_surat_pengantar" name="surat_pengantar"
                                                         value="{{ $x->s_pengantar }}">
+                                                    @if ($x->status == 'selesai')
+                                                        <a class="btn btn-primary" target="__blank"
+                                                            href="{{ route('pdf', ['file' => App\Models\KelolaCuti::getBerkas($x->id)]) }}"
+                                                            role="button">Lihat Surat Cuti</a> <br>
+                                                    @endif
+                                                    <input type="hidden" id="val_unggah" name="val_unggah"
+                                                        value="{{ App\Models\KelolaCuti::getBerkas($x->id) }}">
                                                     <button class="btn btn-info"
                                                         onclick="tambah({{ $x }})">Lihat</button>
+                                                    @if ($x->status == 'disetujui')
+                                                        <button class="btn btn-success"
+                                                            onclick="unggah({{ $x }})">Unggah</button>
+                                                    @endif
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -64,6 +77,41 @@
                 </div>
             </div>
         </section>
+    </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalUnggah" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Upload Surat Cuti</h5>
+                    <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form action="/datacuti/unggah" method="post" enctype="multipart/form-data">
+                        @csrf
+                        <input type="text" name="id_pengajuan_surat" id="id_pengajuan_surat">
+                        <div class="form-group row align-items-center">
+                            <div class="col-lg-13 col-3">
+                                <label class="col-form-label">Upload Surat</label>
+                            </div>
+                            <div class="col-lg-12 col-3">
+                                <input type="file" class="form-control" name="unggah" id="unggah">
+                                {{-- <a class="btn btn-info" id="surat_cuti" href="#" target="__blank">Lihat Berkas</a> --}}
+                            </div>
+                        </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="modal fade text-left" id="modaltambah" tabindex="-1" role="dialog" aria-labelledby="myModalLabel17"
@@ -240,9 +288,6 @@
                             <a class="btn btn-info" id="surat_pengantar" href="#" target="__blank">Lihat Berkas</a>
                         </div>
                     </div>
-
-                    <br>
-                    @if (\Illuminate\Support\Facades\Session::get('pengguna')->peran == 'pegawaiumum')
                     <div class="form-group row align-items-center">
                         <div class="col-lg-13 col-3">
                             <label class="col-form-label">Surat Cuti</label>
@@ -252,10 +297,11 @@
                             <a class="btn btn-info" id="surat_cuti" href="#" target="__blank">Lihat Berkas</a>
                         </div>
                     </div>
-
-                            {{-- <div class="col-lg-10 col-9">
+                    <br>
+                    @if (\Illuminate\Support\Facades\Session::get('pengguna')->peran == 'pegawaiumum')
+                        {{-- <div class="col-lg-10 col-9">
                                 <button type="submit" class="btn btn-success ml-1">
-                                    <i class="bx bx-check d-blo@section('kelolacuti','active')
+                                    <i class="bx bx-check d-blo@section('kelolacuti', 'active')
 
 @extends('template')
 
@@ -287,7 +333,7 @@
                                     </tr>
                                     </thead>
                                     <tbody id="idtbody">
-                                    @foreach($data as $y => $x)
+                                    @foreach ($data as $y => $x)
                                         <tr>
                                             <td>{{$y+1}}</td>
                                             <td>PC-{{$x->id}}</td>
@@ -325,7 +371,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title" id="myModalLabel17">
-                        @if(\Illuminate\Support\Facades\Session::get('pengguna')->peran == 'pegawaiumum')
+                        @if (\Illuminate\Support\Facades\Session::get('pengguna')->peran == 'pegawaiumum')
                             Terima Pengajuan
                         @elseif(\Illuminate\Support\Facades\Session::get('pengguna')->peran == 'pegawaiumum')
                             Unggah Pengajuan
@@ -338,7 +384,7 @@
                         <i data-feather="x"></i>
                     </button>
                 </div>
-                @if(\Illuminate\Support\Facades\Session::get('pengguna')->peran == 'pegawaiumum')
+                @if (\Illuminate\Support\Facades\Session::get('pengguna')->peran == 'pegawaiumum')
                     <form action="/kelolacuti/terima" method="POST" enctype="multipart/form-data">
                 @elseif(\Illuminate\Support\Facades\Session::get('pengguna')->peran == 'pegawaiumum')
                     <form action="/kelolacuti/unggah" method="POST" enctype="multipart/form-data">
@@ -373,7 +419,7 @@
                         <div class="form-group row align-items-center">
                             <div class="col-lg-2 col-3">
                                 <label class="col-form-label">Pangkat</label>
-                            </div>
+                            </div>text
                             <div class="col-lg-10 col-9">
                                 <input type="text" class="form-control" id="pangkat" readonly>
                             </div>
@@ -420,7 +466,7 @@
                         </div>
                         <div class="form-group row align-items-center">
                             <div class="col-lg-2 col-3">
-                                <label class="col-form-label">Jenis Cuti</label>
+                                <label class="col-form-label">Jetextnis Cuti</label>
                             </div>
                             <div class="col-lg-10 col-9">
                                 <input type="text" class="form-control" id="jenis_cuti" readonly>
@@ -452,7 +498,7 @@
                         </div>
                         <div class="form-group row align-items-center">
                             <div class="col-lg-13 col-3">
-                                <label class="col-form-label">SK</label>
+                                <label class="col-form-label">SKtext</label>
                             </div>
                            <div class="col-lg-6 col-7">
                                 <a class="btn btn-info" id="sk" href="#" target="__blank">Lihat Berkas</a>
@@ -463,7 +509,7 @@
                                 <label class="col-form-label">Surat Permohonan</label>
                             </div>
                            <div class="col-lg-6 col-7">
-                                <a class="btn btn-info" id="surat_permohonan" href="#" target="__blank">Lihat Berkas</a>
+                                <a class="btn btn-info" id="suratext_permohonan" href="#" target="__blank">Lihat Berkas</a>
                             </div>
                         </div>
                         <div class="form-group row align-items-center">
@@ -477,7 +523,7 @@
 
                         <br>
 
-                        @if(\Illuminate\Support\Facades\Session::get('pengguna')->peran == 'pegawaiumum')
+                        @if (\Illuminate\Support\Facades\Session::get('pengguna')->peran == 'pegawaiumum')
                             <div class="form-group row align-items-center">
                                 <div class="col-lg-2 col-3">
                                     <label class="col-form-label">Unggah</label>
@@ -529,7 +575,7 @@
             $('#nip').val(data.nip)
             $('#pangkat').val(data.pangkat)
             $('#jabatan').val(data.jabatan)
-            $('#kab_kota').val(data.kab_kota)
+            $('#kab_kota').val(data.kab_kota)'PC-' + 
             $('#unit_kerja').val(data.unit_kerja)
             $('#mulai_tgl').val(data.mulai_tgl)
             $('#akhir_tgl').val(data.akhir_tgl)
@@ -553,9 +599,9 @@
 d-sm-none"></i>
                                     <span class="d-none d-sm-block">Unggah</span>
                             </div> --}}
-                        </div>
-                    @endif
-                    {{-- <button type="submit" class="btn btn-success ml-1">
+                </div>
+                @endif
+                {{-- <button type="submit" class="btn btn-success ml-1">
                         <i class="bx bx-check d-block d-sm-none"></i>
                         <span class="d-none d-sm-block">Terima</span>
                     </button>
@@ -563,10 +609,10 @@ d-sm-none"></i>
                         <i class="bx bx-x d-block d-sm-none"></i>
                         <span class="d-none d-sm-block">Batal</span>
                     </button> --}}
-                </div>
-                </form>
             </div>
+            </form>
         </div>
+    </div>
     </div>
 
 @endsection
@@ -579,9 +625,16 @@ d-sm-none"></i>
     <script src="/assets/vendors/simple-datatables/simple-datatables.js"></script>
     <script>
         let table1 = document.querySelector('#table1');
-        let dataTable = new simpleDatatables.DataTable(table1);
+        // let dataTable = new simpleDatatables.DataTable(table1);
+        $('#table1').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf', 'print'
+            ]
+        });
 
         function tambah(data) {
+            var unggah = $('#val_unggah').val();
 
             $('#id_pengajuan').val('PC-' + data.id)
             $('#idnya').val(data.id)
@@ -602,13 +655,13 @@ d-sm-none"></i>
             $('#field_sk').val(data.sk)
             $('#field_surat_permohonan').val(data.s_permohonan)
             $('#field_surat_pengantar').val(data.s_pengantar)
-            $('#field_surat_pengantar').val(data.s_pengantar)
-            $('#field_surat_cuti').val(data.unggah)
+            // $('#field_surat_cuti').val('{{ App\Models\KelolaCuti::getBerkas('<script>data.id</script>') }}')
+            // $('#val_unggah').val(data.unggah)
             var blanko_id = $("#field_blanko").val();
             var sk_id = $("#field_sk").val();
             var suratpermohonan_id = $("#field_surat_permohonan").val();
             var suratpengantar_id = $("#field_surat_pengantar").val();
-            var suratcuti_id = $("#field_surat_cuti").val();
+            var suratcuti_id = unggah;
             var url = '{{ route('pdf', ':file') }}';
             var url_blanko = url.replace(':file', blanko_id);
             var url_sk = url.replace(':file', sk_id);
@@ -623,6 +676,13 @@ d-sm-none"></i>
             $('#surat_pengantar').attr('href', url_suratpengantar)
             $('#surat_cuti').attr('href', url_suratcuti)
             $('#modaltambah').modal('show')
+        }
+
+        function unggah(data) {
+            // $('#id_pengajuan_surat').val('PC-' + data.id)
+            console.log(data);
+            $('#id_pengajuan_surat').val(data.id)
+            $('#modalUnggah').modal('show')
         }
     </script>
     <script>

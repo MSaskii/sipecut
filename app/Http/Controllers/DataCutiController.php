@@ -82,42 +82,59 @@ class DataCutiController extends Controller
         // $data->status = 'disetujui';
         // $data->save();
         // return redirect('/datacuti')->with(['sukses'=>'Berhasil']);
-        if ($request->file('surat_cuti') != '') {
-            $surat =  $request->file('surat_cuti');
+        // if ($request->file('surat_cuti') != '') {
+        //     $surat =  $request->file('surat_cuti');
 
-            $name = $surat->getClientOriginalName();
-            $request->file('surat_cuti')->move('surat', $name);
-        }
+        //     $name = $surat->getClientOriginalName();
+        //     $request->file('surat_cuti')->move('surat', $name);
+        // }
         $data = AjukanCuti::find($request->id);
         $data->status = $request->status_pengajuan;
         $data->keterangan = $request->keterangan;
-        // $data->status = 'diunggah';
+        // $data->status = 'disetujui';
         $save = $data->save();
-        if ($save && $data->status == 'Disetujui') {
-
-            // $request->file('surat')->move('surat', $surat);
-            $unggah = KelolaCuti::create([
-                'ajukan_cuti_id' => $data->id,
-                'unggah' => $name
-            ]);
-
-            if ($unggah) {
-                return redirect('/datacuti')->with(['sukses' => 'Berhasil']);
-            }
-        } else {
-
-            return redirect('/datacuti')->with(['sukses' => 'Status Surat ' . $data->status]);
+        if ($save) {
+            return redirect('/datacuti')->with(['sukses' => 'Berhasil']);
         }
+
+        // if ($save && $data->status == 'Disetujui') {
+
+        //     // $request->file('surat')->move('surat', $surat);
+        //     $unggah = KelolaCuti::create([
+        //         'ajukan_cuti_id' => $data->id,
+        //         'unggah' => $name
+        //     ]);
+
+        //     if ($unggah) {
+        //         return redirect('/datacuti')->with(['sukses' => 'Berhasil']);
+        //     }
+        // } else {
+
+        //     return redirect('/datacuti')->with(['sukses' => 'Status Surat ' . $data->status]);
+        // }
     }
 
     public function unggah(Request $request)
     {
-        $surat = md5($request->nomor_surat . $request->perihal . $request->asal_surat . $request->status) . '.pdf';
-        $request->file('surat')->move('surat', $surat);
-        $data = AjukanCuti::find($request->id);
-        $data->file_surat = $surat;
-        $data->status = 'diunggah';
-        $data->save();
-        return redirect('/datacuti')->with(['sukses' => 'Berhasil']);
+        if ($request->file('unggah') != '') {
+            $surat = $request->file('unggah');
+            $name_cuti = $surat->getClientOriginalName();
+            $request->file('unggah')->move('surat', $name_cuti);
+        }
+
+        $data = KelolaCuti::create([
+            "ajukan_cuti_id" => $request->id_pengajuan_surat,
+            "unggah" => $name_cuti
+        ]);
+        $save = $data->save();
+        if ($save) {
+            $ajuan =  AjukanCuti::find($request->id_pengajuan_surat);
+            $ajuan->status = "selesai";
+            $update = $ajuan->save();
+            if ($update) {
+                return redirect('/datacuti')->with(['sukses' => 'Berhasil']);
+            }
+        }
+        // $data->status = 'diunggah';
     }
 }

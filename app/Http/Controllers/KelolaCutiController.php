@@ -14,9 +14,12 @@ class KelolaCutiController extends Controller
         $pengguna = Session::get('pengguna');
         if ($pengguna->peran == 'pegawaiumum') {
             // $data = AjukanCuti::where('status','disetujui')->get();
-            $data = AjukanCuti::join('kelola_cuti', 'ajukan_cuti.id', '=', 'kelola_cuti.ajukan_cuti_id')->get();
+            $data = AjukanCuti::all();
+            
+            // $data = AjukanCuti::join('kelola_cuti', 'ajukan_cuti.id', '=', 'kelola_cuti.ajukan_cuti_id')->where('status','disetujui')->get();
         } else {
             $data = AjukanCuti::all();
+            
         }
 
         return view('kelolaCuti', ['data' => $data]);

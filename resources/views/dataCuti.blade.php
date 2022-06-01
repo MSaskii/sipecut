@@ -51,6 +51,7 @@
                                                         value="{{ $x->s_permohonan }}">
                                                     <input type="hidden" id="val_surat_pengantar" name="surat_pengantar"
                                                         value="{{ $x->s_pengantar }}">
+                                            
                                                     <button class="btn btn-info"
                                                         onclick="tambah({{ $x }})">Lihat</button>
                                                 </td>
@@ -98,6 +99,7 @@
                         </div>
                         <div class="col-lg-10 col-9">
                             <input type="text" class="form-control" id="id_pengajuan" readonly>
+                            
                         </div>
                     </div>
                     <div class="form-group row align-items-center">
@@ -252,12 +254,12 @@
                                 <option value="ditolak">Ditolak</option>
                             </select>
                         </div>
-                        <div class="form-group">
+                        <div class="form-group" id="div_keterangan" style="display:none;">
                             <label for="keterangan">Keterangan / Alasan</label>
                             <textarea class="form-control" name="keterangan" id="keterangan" required rows="3"></textarea>
                         </div>
 
-                        <div class="form-group row align-items-center" id="div_unggah" style="display:none;">
+                        {{-- <div class="form-group row align-items-center" id="div_unggah" style="display:none;">
                             <div class="col-lg-2 col-3">
                                 <label class="col-form-label">Unggah</label>
                             </div>
@@ -265,17 +267,14 @@
                                 <input type="file" name="surat_cuti" id="surat_cuti" class="form-control" accept="application/pdf"
                                     required>
                             </div>
-                            {{-- <div class="col-lg-10 col-9">
-                                <button type="submit" class="btn btn-success ml-1">
-                                    <i class="bx bx-check d-block d-sm-none"></i>
-                                    <span class="d-none d-sm-block">Unggah</span>
-                            </div> --}}
-                        </div>
+                        </div> --}}
                     @endif
-                    <button type="submit" class="btn btn-success ml-1">
-                        <i class="bx bx-check d-block d-sm-none"></i>
-                        <span class="d-none d-sm-block">Terima</span>
-                    </button>
+                    @if (\Illuminate\Support\Facades\Session::get('pengguna')->peran == 'pegawaiumum')
+                        <button type="submit" class="btn btn-success ml-1">
+                            <i class="bx bx-check d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">Terima</span>
+                        </button>
+                    @endif
                     <button type="button" class="btn btn-warning" data-bs-dismiss="modal">
                         <i class="bx bx-x d-block d-sm-none"></i>
                         <span class="d-none d-sm-block">Batal</span>
@@ -339,12 +338,12 @@
     </script>
     <script>
         $("#status_pengajuan").on('change', function() {
-            if ($(this).val() == "disetujui") {
-                $("#div_unggah").show();
-                $("#surat_cuti").prop('required', true);
+            if ($(this).val() != "disetujui") {
+                $("#div_keterangan").show();
+                $("#keterangan").prop('required', true);
             } else {
-                $("#div_unggah").hide();
-                $("#surat_cuti").prop('required', false);
+                $("#div_keterangan").hide();
+                $("#keterangan").prop('required', false);
             }
         })
     </script>

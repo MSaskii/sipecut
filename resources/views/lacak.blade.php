@@ -54,20 +54,19 @@
                                                     <td>Disetujui</td>
                                                     <td>Pengajuan sedang telah diverifikasi</td>
                                                 </tr>
-                                                @if ($tipe == 'PC')
-                                                    <tr>
-                                                        <td>2</td>
-                                                        <td>Disetujui</td>
-                                                        <td>Pengajuan Selesai, Silahkan datang ke Media Center Disdik
-                                                            Riau</td>
-                                                    </tr>
-                                                @else
-                                                    <tr>
-                                                        <td>2</td>
-                                                        <td>Disetujui</td>
-                                                        <td>Silahkan datang ke Media Center Disdik Riau</td>
-                                                    </tr>
-                                                @endif
+                                            @elseif($data->status == 'selesai')
+                                                <tr>
+                                                    <td>1</td>
+                                                    <td>Disetujui</td>
+                                                    <td>Pengajuan sedang telah diverifikasi</td>
+                                                </tr>
+
+                                                <tr>
+                                                    <td>2</td>
+                                                    <td>Selesai</td>
+                                                    <td>Pengajuan Selesai, Silahkan datang ke Media Center Disdik
+                                                        Riau</td>
+                                                </tr>
                                             @else
                                                 <tr>
                                                     <td>1</td>
