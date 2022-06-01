@@ -24,26 +24,34 @@ class DataCutiController extends Controller
 
     public function simpan(Request $request)
     {
+        $uploadPath = public_path('surat');
+        // $name_blanko="";
+        // $name_sk="";
+        // $name_permohonan="";
+        // $name_pengantar="";
         if ($request->file('blanko') != '') {
             $surat =  $request->file('blanko');
 
-            $name = $surat->getClientOriginalName();
-            $request->file('blanko')->move('surat', $name);
-        } elseif ($request->file('sk') != '') {
+            $name_blanko = $surat->getClientOriginalName();
+            $request->file('blanko')->move('surat', $name_blanko);
+        }
+        if ($request->file('sk') != '') {
             $surat =  $request->file('sk');
 
-            $name = $surat->getClientOriginalName();
-            $request->file('sk')->move('surat', $name);
-        } elseif ($request->file('surat_permohonan') != '') {
+            $name_sk = $surat->getClientOriginalName();
+            $request->file('sk')->move('surat', $name_sk);
+        }
+        if ($request->file('surat_permohonan') != '') {
             $surat =  $request->file('surat_permohonan');
 
-            $name = $surat->getClientOriginalName();
-            $request->file('surat_permohonan')->move('surat', $name);
-        } elseif ($request->file('surat_pengantar') != '') {
+            $name_permohonan = $surat->getClientOriginalName();
+            $request->file('surat_permohonan')->move('surat', $name_permohonan);
+        }
+        if ($request->file('surat_pengantar') != '') {
             $surat =  $request->file('surat_pengantar');
 
-            $name = $surat->getClientOriginalName();
-            $request->file('surat_pengantar')->move('surat', $name);
+            $name_pengantar = $surat->getClientOriginalName();
+            $request->file('surat_pengantar')->move('surat', $name_pengantar);
         }
         $data = AjukanCuti::create([
             'nama_pegawai' => $request->nama_pegawai,
@@ -59,10 +67,10 @@ class DataCutiController extends Controller
             'jenis_cuti' => $request->jenis_cuti,
             'ket_cuti' => $request->ket_cuti,
             'no_hp' => $request->no_hp,
-            'blanko' => $request->blanko,
-            'sk' => $request->sk,
-            's_permohonan' => $request->surat_permohonan,
-            's_pengantar' => $request->surat_pengantar,
+            'blanko' => $name_blanko,
+            'sk' =>  $name_sk,
+            's_permohonan' => $name_permohonan,
+            's_pengantar' => $name_pengantar,
             'status' => 'diajukan',
         ]);
         return redirect('/ajukancuti')->with(['sukses' => $data->id]);
