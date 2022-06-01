@@ -24,6 +24,27 @@ class DataCutiController extends Controller
 
     public function simpan(Request $request)
     {
+        if ($request->file('blanko') != '') {
+            $surat =  $request->file('blanko');
+
+            $name = $surat->getClientOriginalName();
+            $request->file('blanko')->move('surat', $name);
+        } elseif ($request->file('sk') != '') {
+            $surat =  $request->file('sk');
+
+            $name = $surat->getClientOriginalName();
+            $request->file('sk')->move('surat', $name);
+        } elseif ($request->file('surat_permohonan') != '') {
+            $surat =  $request->file('surat_permohonan');
+
+            $name = $surat->getClientOriginalName();
+            $request->file('surat_permohonan')->move('surat', $name);
+        } elseif ($request->file('surat_pengantar') != '') {
+            $surat =  $request->file('surat_pengantar');
+
+            $name = $surat->getClientOriginalName();
+            $request->file('surat_pengantar')->move('surat', $name);
+        }
         $data = AjukanCuti::create([
             'nama_pegawai' => $request->nama_pegawai,
             'nip' => $request->nip,
@@ -53,7 +74,7 @@ class DataCutiController extends Controller
         // $data->status = 'disetujui';
         // $data->save();
         // return redirect('/datacuti')->with(['sukses'=>'Berhasil']);
-        if($request->file('surat_cuti') !=''){
+        if ($request->file('surat_cuti') != '') {
             $surat =  $request->file('surat_cuti');
 
             $name = $surat->getClientOriginalName();
@@ -65,7 +86,7 @@ class DataCutiController extends Controller
         // $data->status = 'diunggah';
         $save = $data->save();
         if ($save && $data->status == 'Disetujui') {
-          
+
             // $request->file('surat')->move('surat', $surat);
             $unggah = KelolaCuti::create([
                 'ajukan_cuti_id' => $data->id,
@@ -79,7 +100,6 @@ class DataCutiController extends Controller
 
             return redirect('/datacuti')->with(['sukses' => 'Status Surat ' . $data->status]);
         }
-
     }
 
     public function unggah(Request $request)
