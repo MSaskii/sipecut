@@ -42,7 +42,7 @@
                             </center>
                         </div>
                     @else
-                        <form action="/datacuti" method="post" class="col-md-14">
+                        <form action="/datacuti" method="post" enctype="multipart/form-data" class="col-md-14">
                             @csrf
                             <h4>Silahkan Isi Form Pengajuan</h4>
                             <div class="form-group row align-items-center">
