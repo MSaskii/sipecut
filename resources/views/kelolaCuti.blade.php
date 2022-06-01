@@ -14,7 +14,7 @@
                         </div>
                         <div class="card-content">
                             <div class="card-body">
-                                <table class="table table-striped table-responsive" id="table1">
+                                <table class="table table-striped" id="table1">
                                     <thead>
                                         <tr>
                                             <th>No</th>
@@ -625,13 +625,7 @@ d-sm-none"></i>
     <script src="/assets/vendors/simple-datatables/simple-datatables.js"></script>
     <script>
         let table1 = document.querySelector('#table1');
-        // let dataTable = new simpleDatatables.DataTable(table1);
-        $('#table1').DataTable({
-            dom: 'Bfrtip',
-            buttons: [
-                'copy', 'csv', 'excel', 'pdf', 'print'
-            ]
-        });
+        let dataTable = new simpleDatatables.DataTable(table1);
 
         function tambah(data) {
             var unggah = $('#val_unggah').val();
